@@ -66,7 +66,8 @@ def save_fn_call():
 if "messages" not in st.session_state:
     st.session_state["messages"] = [{"role": "assistant", "content": "How can I help you?"}]
 
-st.json(st.session_state.messages, expanded=False)
+# Display session_state messages for reference / debugging
+# st.json(st.session_state.messages, expanded=False)
 
 if prompt := st.chat_input():
     st.session_state.messages.append({"role": "user", "content": prompt})
