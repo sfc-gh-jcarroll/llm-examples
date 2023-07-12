@@ -1,0 +1,2 @@
+https://github.com/LukasMasuch/st-playground/releases/download/chat-component-0.0.8/streamlit-1.23.78-py2.py3-none-any.whl
+git+https://github.com/tconkling/langchain.git@tim/StreamlitCallbackHandler
