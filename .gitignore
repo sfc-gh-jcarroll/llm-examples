@@ -1,4 +1,5 @@
 .venv
 .chroma
+.DS_Store
 secrets.toml
 __pycache__/
