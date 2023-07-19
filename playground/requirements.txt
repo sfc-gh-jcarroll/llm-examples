@@ -1,4 +1,4 @@
 langchain>=0.0.216
-"../streamlit-1.24.1-py2.py3-none-any.whl"
+"./streamlit-1.24.1-py2.py3-none-any.whl"
 openai>=0.27.8
 duckduckgo-search>=3.8.3
