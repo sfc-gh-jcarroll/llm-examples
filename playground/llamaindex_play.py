@@ -1,4 +1,5 @@
 from typing import Any, Dict, List, Optional
+from pathlib import Path
 import streamlit as st
 from llama_index import VectorStoreIndex, SimpleDirectoryReader
 from llama_index import ServiceContext
@@ -99,7 +100,8 @@ def load_engine_for_key(openai_key):
         callback_manager=callback_manager, llm=llm, embed_model=embedding
     )
 
-    documents = SimpleDirectoryReader("data").load_data()
+    data_filepath = (Path(__file__).parent / "data").absolute()
+    documents = SimpleDirectoryReader(data_filepath).load_data()
     index = VectorStoreIndex.from_documents(documents, service_context=service_context)
     query_engine = index.as_query_engine(streaming=True)
     return query_engine, st_cb
