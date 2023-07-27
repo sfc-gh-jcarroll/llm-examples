@@ -1,3 +1,4 @@
 chromadb
 tiktoken
 pinecone-client
+llama-index
