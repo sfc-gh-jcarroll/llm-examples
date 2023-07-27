@@ -91,7 +91,7 @@ submit = st.button("Run query")
 @st.cache_resource(ttl="30m", show_spinner="Setting up query engine")
 def load_engine_for_key(openai_key):
     llm = OpenAI(model="gpt-3.5-turbo", temperature=0, api_key=openai_key)
-    embedding = OpenAIEmbedding(model="text-davinci-003", api_key=openai_key)
+    embedding = OpenAIEmbedding(model="text-embedding-ada-002", api_key=openai_key)
     st_cb = StreamlitRetrievalWriter()
     callback_manager = CallbackManager([st_cb])
 
