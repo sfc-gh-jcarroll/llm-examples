@@ -3,6 +3,7 @@ import streamlit as st
 from llama_index import VectorStoreIndex, SimpleDirectoryReader
 from llama_index import ServiceContext
 from llama_index.callbacks import CallbackManager
+from llama_index.embeddings.openai import OpenAIEmbedding
 from llama_index.llms import OpenAI
 
 from llama_index.callbacks.base import BaseCallbackHandler
@@ -90,10 +91,13 @@ submit = st.button("Run query")
 @st.cache_resource(ttl="30m", show_spinner="Setting up query engine")
 def load_engine_for_key(openai_key):
     llm = OpenAI(model="gpt-3.5-turbo", temperature=0, api_key=openai_key)
+    embedding = OpenAIEmbedding(model="text-davinci-003", api_key=openai_key)
     st_cb = StreamlitRetrievalWriter()
     callback_manager = CallbackManager([st_cb])
 
-    service_context = ServiceContext.from_defaults(callback_manager=callback_manager, llm=llm)
+    service_context = ServiceContext.from_defaults(
+        callback_manager=callback_manager, llm=llm, embed_model=embedding
+    )
 
     documents = SimpleDirectoryReader("data").load_data()
     index = VectorStoreIndex.from_documents(documents, service_context=service_context)
