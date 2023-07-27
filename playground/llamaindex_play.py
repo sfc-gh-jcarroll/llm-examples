@@ -8,6 +8,10 @@ from llama_index.llms import OpenAI
 from llama_index.callbacks.base import BaseCallbackHandler
 from llama_index.callbacks.schema import CBEventType
 
+st.set_page_config(page_title="LlamaIndex Streamlit Example", page_icon="🦙")
+
+st.title("🦙 LlamaIndex Streamlit Example")
+
 
 class StreamlitRetrievalWriter(BaseCallbackHandler):
     """Callback handler for writing retrieval results to Streamlit."""
@@ -73,10 +77,6 @@ class StreamlitRetrievalWriter(BaseCallbackHandler):
                 self._results.write(f"**Node {idx}: Score: {node.score}**")
                 self._results.write(node.node.text)
 
-
-st.set_page_config(page_title="LlamaIndex Streamlit Example", page_icon="🦙")
-
-st.title("🦙 LlamaIndex Streamlit Example")
 
 api_key = st.sidebar.text_input("OpenAI API Key", type="password")
 if not api_key:
