@@ -40,7 +40,7 @@ with st.echo("below"):
         import pandas as pd
 
         df = pd.DataFrame(state.snippets.values())
-        df["url"] = BASE_URL + "?q=" + df["hash"]
+        df["url"] = BASE_URL + "?q=" + df.get("hash", "")
         st.dataframe(df, hide_index=True, column_config={"url": st.column_config.LinkColumn()})
 
     if st.button("Delete snippets"):

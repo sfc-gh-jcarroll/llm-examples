@@ -8,8 +8,10 @@ class DetaConnection(ExperimentalBaseConnection[deta.Base], StateBackend):
     """Basic st.experimental_connection implementation for Deta"""
 
     def _connect(self, **kwargs) -> deta.Base:
-        client = deta.Deta(self._secrets.deta_key)
-        db = client.Base(self._secrets.base)
+        project_id = self._secrets.get("project_id", None)
+        client = deta.Deta(self._secrets.api_key, project_id=project_id)
+        host = self._secrets.get("host", None)
+        db = client.Base(self._secrets.base, host=host)
         return db
 
     @property
