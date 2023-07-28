@@ -1,3 +1,4 @@
 streamlit==1.25
 deta==1.2
 openai
+streamlit-ace

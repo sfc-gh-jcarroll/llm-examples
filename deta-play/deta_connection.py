@@ -1,14 +1,14 @@
 from streamlit.connections import ExperimentalBaseConnection
 from st_app_state.interface import StateBackend
 import deta
-from typing import Any, Union
+from typing import Union
 
 
 class DetaConnection(ExperimentalBaseConnection[deta.Base], StateBackend):
     """Basic st.experimental_connection implementation for Deta"""
 
     def _connect(self, **kwargs) -> deta.Base:
-        client = deta.Deta(self._secrets.data_key)
+        client = deta.Deta(self._secrets.deta_key)
         db = client.Base(self._secrets.base)
         return db
 

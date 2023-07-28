@@ -2,10 +2,16 @@ import streamlit as st
 from typing import Any
 from st_app_state.interface import StateBackend
 
+DEFAULT_ID = "GLOBAL"
+
 
 class AppState:
-    def __init__(self, id: str, backend: StateBackend):
+    def __init__(self, id: str | None, backend: StateBackend):
         self._conn = backend
+
+        if id is None:
+            id = DEFAULT_ID
+
         self._id = id
         if "_app_state" not in st.session_state:
             st.session_state._app_state = {}
@@ -16,7 +22,7 @@ class AppState:
             st.session_state._app_state[id] = val
 
     @classmethod
-    def from_deta(cls, id):
+    def from_deta(cls, id=DEFAULT_ID):
         from deta_connection import DetaConnection
 
         return cls(id, DetaConnection("deta"))

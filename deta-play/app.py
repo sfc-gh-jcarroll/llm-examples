@@ -12,7 +12,8 @@ if not USER_KEY:
     st.info(
         """
         Please enter a personal Conversation Password to continue.
-        Note: Any other user who can guess your password will have access to your saved conversations.
+        Note: Any other user who can guess your password will have access to your saved
+        conversations.
         """
     )
     st.stop()
