@@ -139,7 +139,9 @@ if prompt or new_function_response:
                 if "name" in fn:  # Only returned once at the beginning currently
                     func_name = fn.get("name")
                     func_args = ""
-                    status = status_space.status(f"Executing `{func_name}`")
+                    status = status_space.status(
+                        f"Executing `{func_name}`", expanded=check_functions
+                    )
                     args_container = status.empty()
                 if arg_delta := fn.get("arguments", ""):
                     func_args += arg_delta
