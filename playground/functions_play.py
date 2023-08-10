@@ -10,7 +10,9 @@ st.title("Playing with OpenAI functions")
 This bot is enabled with web search using OpenAI Function Calls. It uses status panel prototype for rendering function call and response.
 The user can decide via checkbox in sidebar whether to run functions automatically or inspect/edit and approve function calls before running.
 """
-check_functions = st.sidebar.checkbox("Edit and approve function calls before running?", value=True)
+check_functions = st.sidebar.checkbox(
+    "Edit and approve function calls before running?", value=False
+)
 
 
 if "openai_api_key" in st.secrets:
@@ -79,19 +81,19 @@ for i, msg in enumerate(st.session_state.messages):
         if i == 0 or st.session_state.messages[i - 1]["role"] != "function":
             last_asst = st.chat_message("assistant")
             with last_asst:
-                sp = st.status_panel("autocollapse")
+                status_space = st.container()
         with last_asst:
             if content := msg.get("content", ""):
                 st.write(content)
             elif fn := msg.get("function_call", {}):
                 last_fn = fn["name"]
-                last_status = sp.stage(f"🤔 Executing `{last_fn}`")
+                last_status = status_space.status(f"Executing `{last_fn}`")
                 last_status.code(fn["arguments"], language="json")
     elif msg["role"] == "function":
         if msg["name"] != last_fn:
             st.error("Unexpected function response")
             st.stop()
-        last_status.set_label(f"✅ Executing `{last_fn}`")
+        last_status.update(state="complete")
         last_status.write(msg["content"])
 
 # Do we have a function ready to execute?
@@ -108,8 +110,7 @@ if fn := st.session_state.messages[-1].get("function_call", {}):
         st.session_state.messages.append(
             {"role": "function", "name": func_name, "content": results}
         )
-        last_status.set_label(f"✅ Executing `{func_name}`")
-        last_status.set_expandable_state(st.proto.Block_pb2.Block.Expandable.AUTO_COLLAPSED)
+        last_status.update(state="complete")
     else:
         st.error("Unexpected function name")
         st.stop()
@@ -121,7 +122,7 @@ if prompt:  # last was a new user message, we need a new asst chat bubble
 if prompt or new_function_response:
     with last_asst:
         response = ""
-        sp = st.status_panel("autocollapse")
+        status_space = st.container()
         resp_container = st.empty()
         func_name = ""
         for delta in openai.ChatCompletion.create(
@@ -138,7 +139,7 @@ if prompt or new_function_response:
                 if "name" in fn:  # Only returned once at the beginning currently
                     func_name = fn.get("name")
                     func_args = ""
-                    status = sp.stage(f"🤔 Executing `{func_name}`")
+                    status = status_space.status(f"Executing `{func_name}`")
                     args_container = status.empty()
                 if arg_delta := fn.get("arguments", ""):
                     func_args += arg_delta

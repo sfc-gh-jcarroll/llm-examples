@@ -1,5 +1,5 @@
 langchain>=0.0.216
-streamlit-1.24.1-py2.py3-none-any.whl
+https://core-previews.s3-us-west-2.amazonaws.com/feature/mutable-expander-v2-preview/streamlit-1.25.0-py2.py3-none-any.whl
 openai>=0.27.8
 duckduckgo-search>=3.8.3
 llama-index>=0.7.13
