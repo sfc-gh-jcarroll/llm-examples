@@ -5,6 +5,10 @@ from streamlit_feedback import streamlit_feedback
 
 st.title("🔎 Chat with user feedback (Trubrics)")
 
+"""A simple app using [streamlit-feedback](https://github.com/trubrics/streamlit-feedback)
+from Trubrics.
+"""
+
 if "authorized" not in st.session_state:
     "Enter the password to continue"
     app_password = st.text_input("App password", type="password")
