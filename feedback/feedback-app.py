@@ -6,7 +6,8 @@ from streamlit_feedback import streamlit_feedback
 st.title("🔎 Chat with user feedback (Trubrics)")
 
 """A simple app using [streamlit-feedback](https://github.com/trubrics/streamlit-feedback)
-from Trubrics.
+from Trubrics. **Note:** Has a bug currently where the feedback will reset. Try clicking it again if this happens.
+We're working on a fix :)
 """
 
 if "authorized" not in st.session_state:
