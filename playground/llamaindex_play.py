@@ -58,8 +58,9 @@ class StreamlitRetrievalWriter(BaseCallbackHandler):
             and event_type not in self.event_starts_to_ignore
             and payload is not None
         ):
-            self._results = self._container.expander(
-                f"**Retrieval:** {payload['query_str']}", expanded=False
+            print("QUERY EVENT START")
+            self._results = self._container.status(
+                f"**Retrieval:** {payload['query_str']}", expanded=True
             )
         return event_id
 
@@ -75,30 +76,33 @@ class StreamlitRetrievalWriter(BaseCallbackHandler):
             and event_type not in self.event_ends_to_ignore
             and payload is not None
         ):
+            print("RETRIEVE EVENT END")
             for idx, node in enumerate(payload["nodes"]):
                 self._results.write(f"**Node {idx}: Score: {node.score}**")
                 self._results.write(node.node.text)
+            ########
+            # NOTE: If you add `expanded=True` here, the bug does not repro
+            ########
+            self._results.update(state="complete")
 
 
-api_key = st.sidebar.text_input("OpenAI API Key", type="password")
+api_key = st.secrets.openai_api_key
 if not api_key:
     st.info("Please add an OpenAI API Key to continue.")
     st.stop()
 
-prompt = st.text_input("Ask a query about Paul Graham")
+prompt = st.text_input("Ask a query about Paul Graham", value="What did he do growing up?")
 submit = st.button("Run query")
 
-
-@st.cache_resource(ttl="30m", show_spinner="Setting up query engine")
-def load_engine_for_key(openai_key):
+if prompt and submit:
     llm = OpenAI(
         model="gpt-3.5-turbo",
         temperature=0,
-        api_key=openai_key,
-        additional_kwargs=dict(api_key=openai_key),
+        api_key=api_key,
+        additional_kwargs=dict(api_key=api_key),
     )
-    embedding = OpenAIEmbedding(model="text-embedding-ada-002", api_key=openai_key)
-    st_cb = StreamlitRetrievalWriter()
+    embedding = OpenAIEmbedding(model="text-embedding-ada-002", api_key=api_key)
+    st_cb = StreamlitRetrievalWriter(container=st.container())
     callback_manager = CallbackManager([st_cb])
 
     service_context = ServiceContext.from_defaults(
@@ -109,12 +113,6 @@ def load_engine_for_key(openai_key):
     documents = SimpleDirectoryReader(data_filepath).load_data()
     index = VectorStoreIndex.from_documents(documents, service_context=service_context)
     query_engine = index.as_query_engine(streaming=True)
-    return query_engine, st_cb
-
-
-if prompt and submit:
-    query_engine, st_cb = load_engine_for_key(api_key)
-    st_cb.set_container(st.container())
     response = query_engine.query(prompt)
     answer = st.empty()
     answer_text = ""
