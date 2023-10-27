@@ -1,0 +1,10 @@
+name: Streamlit app actions
+on: [push, pull_request]
+jobs:
+  streamlit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: streamlit/streamlit-app-action@9274a63
+        with:
+          app-path: Chatbot.py
