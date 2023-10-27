@@ -5,6 +5,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - uses: streamlit/streamlit-app-action@9274a63
+      - uses: streamlit/streamlit-app-action@9274a63361f99159450c5033340f6aa6a5c18c96
         with:
           app-path: Chatbot.py
