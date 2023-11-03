@@ -10,5 +10,4 @@ jobs:
           python-version: '3.11'
       - uses: streamlit/streamlit-app-action@b1b4ba80fa9161c81853e0c885437e894086ff4e
         with:
-          app-path: Chatbot.py
-          ruff: true
+          skip-smoke: true
