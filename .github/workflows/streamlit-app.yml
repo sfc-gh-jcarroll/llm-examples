@@ -8,7 +8,7 @@ jobs:
       - uses: actions/setup-python@v3
         with:
           python-version: '3.11'
-      - uses: streamlit/streamlit-app-action@b1b4ba80fa9161c81853e0c885437e894086ff4e
+      - uses: streamlit/streamlit-app-action@a5965d90c4ecfb7eb9d10764434e67d3a3e0af46
         with:
           app-path: Chatbot.py.py
           ruff: true
