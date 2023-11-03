@@ -10,7 +10,7 @@ jobs:
           python-version: '3.11'
       - uses: streamlit/streamlit-app-action@a5965d90c4ecfb7eb9d10764434e67d3a3e0af46
         with:
-          app-path: Chatbot.py.py
+          app-path: Chatbot.py
           ruff: true
           pytest-args: -v --junit-xml=test-results.xml
       - if: always()
