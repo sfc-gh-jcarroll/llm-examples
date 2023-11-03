@@ -8,11 +8,10 @@ jobs:
       - uses: actions/setup-python@v3
         with:
           python-version: '3.11'
-      - uses: streamlit/streamlit-app-action@v0
+      - uses: streamlit/streamlit-app-action@b1b4ba80fa9161c81853e0c885437e894086ff4e
         with:
-          app-path: streamlit_app.py
+          app-path: Chatbot.py.py
           ruff: true
-          # Add pytest-args to output junit xml
           pytest-args: -v --junit-xml=test-results.xml
       - if: always()
         uses: pmeier/pytest-results-action@main
