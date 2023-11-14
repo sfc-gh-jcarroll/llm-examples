@@ -17,7 +17,7 @@ if prompt := st.chat_input():
         with st.spinner("Thinking..."):
             r = client.chat.completions.create(
                 messages=st.session_state.messages,
-                model="gpt-3.5-turbo",
+                model="gpt-3.5-turbo-1106",
             )
             msg = r.choices[0].message.content
             st.write(msg)

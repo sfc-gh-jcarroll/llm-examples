@@ -47,7 +47,7 @@ if prompt := st.chat_input():
         response = ""
         stream = client.chat.completions.create(
             messages=messages,
-            model="gpt-3.5-turbo",
+            model="gpt-3.5-turbo-1106",
             temperature=temperature,
             stream=True,
         )
