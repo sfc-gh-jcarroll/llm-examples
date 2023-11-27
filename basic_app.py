@@ -14,11 +14,15 @@ if prompt := st.chat_input():
     st.session_state.messages.append({"role": "user", "content": prompt})
     client = OpenAI(api_key=st.secrets.openai_api_key)
     with st.chat_message("assistant"):
-        with st.spinner("Thinking..."):
-            r = client.chat.completions.create(
-                messages=st.session_state.messages,
-                model="gpt-3.5-turbo-1106",
-            )
-            msg = r.choices[0].message.content
-            st.write(msg)
-            st.session_state.messages.append({"role": "assistant", "content": msg})
+        response_block = st.empty()
+        response = ""
+        stream = client.chat.completions.create(
+            messages=st.session_state.messages,
+            model="gpt-3.5-turbo-1106",
+            stream=True,
+        )
+        for part in stream:
+            next = part.choices[0].delta.content or ""
+            response = response + next
+            response_block.markdown(response)
+        st.session_state.messages.append({"role": "assistant", "content": response})
