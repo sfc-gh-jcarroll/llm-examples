@@ -3,42 +3,40 @@ from openai import OpenAI
 
 st.title("🤖 AI for developers basic bot!")
 
-if "messages" not in st.session_state or st.sidebar.button("Clear chat history"):
-    st.session_state.messages = [
-        {"role": "system", "content": ""},
-        {"role": "assistant", "content": "How can I help you?"},
-    ]
+if st.sidebar.button("Clear chat history") or "messages" not in st.session_state:
+    st.session_state.messages = [{"role": "assistant", "content": "How can I help you?"}]
 
 # Set custom temperature
-temperature = st.sidebar.number_input("Temperature", 0.0, 2.0, 1.0, step=0.1)
+temperature = st.sidebar.slider("Temperature", 0.0, 2.0, 1.0, step=0.1)
 
 # Assign a persona to the assistant
-persona_options = ["", "🦜 Pirate 🏴‍☠️ ", "🧐 Refined gentleman ", "🦹 Supervillain "]
+persona_options = ["", "🦜 Pirate 🏴‍☠️ ", "🧐 Refined gentleman ", "🦹 Evil supervillain "]
 persona = st.sidebar.selectbox(
     "Persona", persona_options, help="Which persona the assistant should adopt"
 )
-st.session_state.messages[0][
-    "content"
-] = f"You are a {persona}assistant. Make it obvious who you are in your responses. Keep your responses brief."
 
-# Take in a file for input context
+# User can upload a file for context
 context_file = st.sidebar.file_uploader("Input context", type=("txt", "md"), accept_multiple_files=False)
-if context_file:
-    context = context_file.read().decode()
-    context_msg = f"The user provided the following document for context. Please refer to the document in your response.\n\n----------\n\n{context}\n\n----------"
 
-for m in st.session_state.messages[1:]:
+for m in st.session_state.messages:
     st.chat_message(m["role"]).write(m["content"])
 
 if prompt := st.chat_input():
     st.chat_message("user").write(prompt)
     st.session_state.messages.append({"role": "user", "content": prompt})
 
-    #  Append the context document to the conversation if available
+    messages = st.session_state.messages
+    if persona:
+        persona_msg = {
+            "role": "system",
+            "content": f"You are a {persona}assistant. Make it obvious who you are in your responses. Keep your responses brief.",
+        }
+        messages = [persona_msg] + messages
+
     if context_file:
-        messages = st.session_state.messages + [{"role": "system", "content": context_msg}]
-    else:
-        messages = st.session_state.messages
+        context = context_file.read().decode()
+        context_msg = f"The user provided the following document for context. Please refer to the document in your response.\n\n----------\n\n{context}\n\n----------"
+        messages = messages + [{"role": "system", "content": context_msg}]
 
     # Get a streaming response from OpenAI
     client = OpenAI(api_key=st.secrets.openai_api_key)
