@@ -4,7 +4,7 @@ import streamlit as st
 from common_ui import (
     chat_response,
     configure_model,
-    generate_title,
+    # generate_title,
     page_setup,
     st_thread,
 )
@@ -139,13 +139,14 @@ if user_input:
         threads.append(t)
         t.start()
 
-    if "conversation_title" not in st.session_state:
-        title_dict = dict()
-        t = st_thread(target=generate_title, args=(user_input, title_dict))
-        t.start()
-        t.join()
-        if "output" in title_dict:
-            st.session_state.conversation_title = title_dict["output"]
+    # TODO: Currently broken since Cortex only supports one message
+    # if "conversation_title" not in st.session_state:
+    #     title_dict = dict()
+    #     t = st_thread(target=generate_title, args=(user_input, title_dict))
+    #     t.start()
+    #     t.join()
+    #     if "output" in title_dict:
+    #         st.session_state.conversation_title = title_dict["output"]
 
     for t in threads:
         t.join()

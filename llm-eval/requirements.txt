@@ -1,3 +1,4 @@
 pydantic
 streamlit==1.35
 litellm
+snowflake-snowpark-python

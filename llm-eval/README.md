@@ -18,10 +18,14 @@ aggregated feedback stats, as well as view automated evaluation _(coming soon!)_
 ## Running the app
 
 1. Clone the repo, create a new python virtual environment, and do `pip install -r requirements.txt`
-1. You'll need a `REPLICATE_API_TOKEN` to call the models. Add it to Streamlit secrets or ENV
-   - You can also configure `enablePersistence = false` in Streamlit secrets to disable saving
+1. You'll need a `[connections.cortex]` section in your `.streamlit/secrets.toml` to call the models.
+   - You can also configure `enablePersistence = false` in secrets to disable saving
      out changes to the `.jsonl` file.
 1. Do `streamlit run app.py` to run the app locally.
+
+## App architecture
+
+TODO: Fill in
 
 ## Contributing
 
