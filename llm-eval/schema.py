@@ -7,7 +7,7 @@ import streamlit as st
 
 
 class ModelConfig(BaseModel):
-    model: str = "snowflake-arctic"
+    model: str = "Snowflake Arctic in Cortex"
     temperature: float = 0.7
     top_p: float = 1.0
     max_new_tokens: int = 1024

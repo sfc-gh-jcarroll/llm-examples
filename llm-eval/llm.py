@@ -3,6 +3,9 @@ from litellm import completion
 from cortex import call_rest_function
 import streamlit as st
 
+# TODO: Address current limitations of Arctic on Cortex
+# 1. Need to use the `-instruct` model variant
+# 2. Need to support multiple messages (or just take the last user msg)
 
 FRIENDLY_MAPPING = {
     "Snowflake Arctic in Cortex": "snowflake-arctic",
@@ -18,7 +21,7 @@ def generate_stream(
     messages = conversation.messages
     model_config: ModelConfig = conversation.model_config
     model = FRIENDLY_MAPPING[model_config.model]
-    USE_CORTEX = (model == "snowflake-arctic")
+    USE_CORTEX = model == "snowflake-arctic"
 
     # Cortex requires the first message is a user
     # This is fine since this app has a placeholder first message anyway
@@ -29,7 +32,7 @@ def generate_stream(
         system_msg = Message(role="system", content=model_config.system_prompt)
         messages = [system_msg]
         messages.extend(conversation.messages)
-    
+
     if USE_CORTEX:
         kwargs = {
             "temperature": model_config.temperature,
