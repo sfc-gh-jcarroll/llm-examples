@@ -6,6 +6,7 @@ import streamlit as st
 # TODO: Address current limitations of Arctic on Cortex
 # 1. Need to use the `-instruct` model variant
 # 2. Need to support multiple messages (or just take the last user msg)
+# 3. Make the title generation work again
 
 FRIENDLY_MAPPING = {
     "Snowflake Arctic in Cortex": "snowflake-arctic",

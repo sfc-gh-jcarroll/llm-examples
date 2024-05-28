@@ -18,7 +18,8 @@ aggregated feedback stats, as well as view automated evaluation _(coming soon!)_
 ## Running the app
 
 1. Clone the repo, create a new python virtual environment, and do `pip install -r requirements.txt`
-1. You'll need a `[connections.cortex]` section in your `.streamlit/secrets.toml` to call the models.
+1. You'll need a `[connections.cortex]` section in your `.streamlit/secrets.toml` to call Arctic in Cortex.
+1. You'll need a `REPLICATE_API_TOKEN` to call the other models. Add it to Streamlit secrets or ENV
    - You can also configure `enablePersistence = false` in secrets to disable saving
      out changes to the `.jsonl` file.
 1. Do `streamlit run app.py` to run the app locally.
