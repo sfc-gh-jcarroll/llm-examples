@@ -1,5 +1,4 @@
 import json
-import pathlib
 import threading
 from copy import deepcopy
 from typing import Dict
@@ -17,58 +16,14 @@ from schema import (
 )
 
 
-def page_setup(title, wide_mode=False, collapse_sidebar=False, visibility="public"):
-    if st.get_option("client.showSidebarNavigation") and "already_ran" not in st.session_state:
-        st.set_option("client.showSidebarNavigation", False)
-        st.session_state.already_ran = True
-        st.rerun()
-
-    # Handle access control
-    if visibility in ("user", "admin") and not st.session_state.get("user_name"):
-        st.switch_page("app.py")
-    if visibility == "admin" and not st.session_state.get("admin_mode"):
-        st.switch_page("app.py")
-
-    CURRENT_DIR = pathlib.Path(__file__).parent.resolve()
-    LOGO = str(CURRENT_DIR / "logo.png")
-    ICON_LOGO = str(CURRENT_DIR / "logo_small.png")
-
-    st.set_page_config(
-        page_title=f"LLM Evaluation: {title}",
-        page_icon=ICON_LOGO,
-        layout="wide" if wide_mode else "centered",
-        initial_sidebar_state="collapsed" if collapse_sidebar else "auto",
-    )
-
-    st.logo(LOGO, link="https://www.snowflake.com", icon_image=ICON_LOGO)
+def page_setup(title, visibility="public"):
     st.title(title)
-
-    # Check for initial login via query_params
-    if initial_user := st.query_params.get("user"):
-        st.session_state.user_name = initial_user
-        del st.query_params["user"]
 
     if "conversation_manager" not in st.session_state:
         st.session_state.conversation_manager = ConversationManager()
 
-    # Add page navigation
+    # Add sidebar content
     with st.sidebar:
-        st.header("LLM Evaluation")
-
-        st.page_link("pages/about.py", label="About", icon=":material/info:")
-        st.page_link("app.py", label="Chat", icon=":material/chat:")
-
-        if st.session_state.get("user_name"):
-            st.page_link("pages/account.py", label="My Account", icon=":material/account_circle:")
-
-        if st.session_state.get("admin_mode"):
-            st.subheader("Admin view")
-            st.page_link("pages/analysis.py", label="Conversation Analysis", icon=":material/analytics:")
-            st.page_link("pages/auto_eval.py", label="Automated Evaluation", icon=":material/quiz:")
-            st.page_link("pages/users.py", label="User Management", icon=":material/group:")
-
-        st.write("")
-
         if user := st.session_state.get("user_name"):
             with st.popover("⚙️&nbsp; Settings", use_container_width=True):
                 st.write(f"Logged in user: `{user}`")
@@ -77,7 +32,7 @@ def page_setup(title, wide_mode=False, collapse_sidebar=False, visibility="publi
                     st.session_state.user_name = None
                     st.session_state.admin_mode = None
                     if visibility != "public":
-                        st.switch_page("app.py")
+                        st.switch_page("page/chat.py")
                     else:
                         st.rerun()
         else:

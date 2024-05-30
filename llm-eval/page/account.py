@@ -32,7 +32,7 @@ if selected:
     st.subheader(cr.title)
     if st.button("Load this conversation"):
         st.session_state.load_conversation = cr.id
-        st.switch_page("app.py")
+        st.switch_page("page/chat.py")
     "#### Summary"
     cols = st.columns(len(cr.conversations))
     for idx, col in enumerate(cols):
