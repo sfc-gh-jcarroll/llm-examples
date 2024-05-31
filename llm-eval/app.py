@@ -4,6 +4,7 @@ import pathlib
 # Check for initial login via query_params
 if initial_user := st.query_params.get("user"):
     st.session_state.user_name = initial_user
+    st.session_state.admin_mode = True
     del st.query_params["user"]
 
 # Set up navigation
